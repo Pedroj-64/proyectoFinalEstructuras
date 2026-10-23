@@ -4,6 +4,9 @@
 package backend;
 
 import org.junit.jupiter.api.Test;
+
+import co.edu.uq.estructuras.sga.App;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
