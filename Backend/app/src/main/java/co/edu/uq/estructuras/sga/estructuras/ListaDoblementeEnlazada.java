@@ -18,7 +18,6 @@ import co.edu.uq.estructuras.sga.excepciones.EstructuraVaciaExcepcion;
  * acceso por posición camina desde el extremo más cercano.
  */
 public class ListaDoblementeEnlazada<T> implements Iterable<T> {
-
     private Nodo<T> cabeza;
     private Nodo<T> cola;
     private int tamano;
@@ -48,7 +47,7 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * Crea una lista nueva con los elementos de otra fuente iterable, en el
      * mismo orden. La copia es estructural: los elementos no se clonan.
      *
-     * @param <T> tipo de los elementos
+     * @param <T>   tipo de los elementos
      * @param lista fuente cuyos elementos se copiarán
      * @return una lista doblemente enlazada independiente
      */
@@ -142,8 +141,10 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * Elimina la primera aparición cuyo valor sea la misma referencia que el
      * valor recibido.
      *
-     * <p>La comparación se realiza con {@code ==}, no con
-     * {@code equals(Object)}.</p>
+     * <p>
+     * La comparación se realiza con {@code ==}, no con
+     * {@code equals(Object)}.
+     * </p>
      *
      * @param valor referencia que se buscará
      * @return {@code true} si se eliminó un elemento; {@code false} si no se
@@ -194,7 +195,7 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * Reemplaza el valor situado en una posición.
      *
      * @param indice índice basado en cero
-     * @param valor nuevo valor
+     * @param valor  nuevo valor
      * @throws IndexOutOfBoundsException si el índice no pertenece a la lista
      */
     public void establecer(int indice, T valor) {
@@ -218,8 +219,10 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * Busca la primera posición cuyo elemento sea la misma referencia que el
      * valor recibido.
      *
-     * <p>La comparación se realiza con {@code ==}, no con
-     * {@code equals(Object)}.</p>
+     * <p>
+     * La comparación se realiza con {@code ==}, no con
+     * {@code equals(Object)}.
+     * </p>
      *
      * @param valor referencia que se buscará
      * @return índice de la primera coincidencia o {@code -1} si no existe
@@ -285,8 +288,10 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
     /**
      * Crea una copia ordenada sin modificar esta lista.
      *
-     * <p>Utiliza merge sort y conserva el orden relativo de elementos iguales.
-     * La complejidad temporal es O(n log n).</p>
+     * <p>
+     * Utiliza merge sort y conserva el orden relativo de elementos iguales.
+     * La complejidad temporal es O(n log n).
+     * </p>
      *
      * @param comparador criterio de ordenamiento
      * @return nueva lista con los elementos ordenados
@@ -352,9 +357,9 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * cabeza. Este método modifica únicamente los enlaces {@code siguiente};
      * los enlaces inversos se reconstruyen al finalizar el ordenamiento.
      *
-     * @param inicio primer nodo de la cadena a ordenar
+     * @param inicio     primer nodo de la cadena a ordenar
      * @param comparador criterio de ordenamiento
-     * @param <T> tipo de los valores de los nodos
+     * @param <T>        tipo de los valores de los nodos
      * @return cabeza de la cadena ordenada
      */
     private static <T> Nodo<T> mezclarOrdenar(Nodo<T> inicio, Comparator<? super T> comparador) {
@@ -372,7 +377,7 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      * otro avanza dos posiciones por iteración.
      *
      * @param inicio primer nodo de la cadena
-     * @param <T> tipo de los valores de los nodos
+     * @param <T>    tipo de los valores de los nodos
      * @return último nodo de la primera mitad
      */
     private static <T> Nodo<T> medioDe(Nodo<T> inicio) {
@@ -388,10 +393,10 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
     /**
      * Fusiona dos cadenas ordenadas en una sola, reutilizando sus nodos.
      *
-     * @param izquierda cabeza de la primera cadena ordenada
-     * @param derecha cabeza de la segunda cadena ordenada
+     * @param izquierda  cabeza de la primera cadena ordenada
+     * @param derecha    cabeza de la segunda cadena ordenada
      * @param comparador criterio de ordenamiento
-     * @param <T> tipo de los valores de los nodos
+     * @param <T>        tipo de los valores de los nodos
      * @return cabeza de la cadena fusionada
      */
     private static <T> Nodo<T> mezclar(Nodo<T> izquierda, Nodo<T> derecha, Comparator<? super T> comparador) {

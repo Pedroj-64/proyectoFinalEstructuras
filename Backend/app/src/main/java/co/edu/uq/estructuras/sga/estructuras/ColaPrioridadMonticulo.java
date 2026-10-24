@@ -8,33 +8,51 @@ import com.google.common.base.Predicate;
 
 import co.edu.uq.estructuras.sga.excepciones.EstructuraVaciaExcepcion;
 
-/// Cola de prioridad genérica implementada como montículo binario de mínimos sobre un arreglo.
-///
-/// El orden lo da un [Comparator]: el elemento que compara como "menor" tiene la mayor
-/// prioridad. Se usa para la cola de preparación (primero las llegadas de hoy, luego por hora
-/// de llegada) y para las reservas pendientes ordenadas por hora de vencimiento.
-///
-/// `ofrecer` y `sacar` son O(log n); `ver` es O(1).
-///
-/// @param <T> tipo de elemento
+/**
+ * Cola de prioridad genérica implementada como un montículo binario de
+ * mínimos sobre un arreglo dinámico.
+ *
+ * <p>El comparador define la prioridad: el elemento que compara como menor
+ * ocupa la raíz y se devuelve primero. Se utiliza para la cola de preparación
+ * (primero las llegadas de hoy y luego la hora de llegada) y para las reservas
+ * pendientes ordenadas por hora de vencimiento.</p>
+ *
+ * <p>{@link #ofrecer(Object)} y {@link #sacar()} tienen complejidad O(log n);
+ * {@link #ver()} tiene complejidad O(1).</p>
+ *
+ * @param <T> tipo de los elementos almacenados
+ */
 public class ColaPrioridadMonticulo<T> implements Iterable<T> {
-    
-    /// Capacidad inicial del arreglo.
+    /** Capacidad inicial del arreglo interno. */
     private static final int CAPACIDAD_INICIAL = 16;
 
-    /// Define la prioridad: el menor sale primero.
+    /** Criterio que determina la prioridad relativa de dos elementos. */
     private final Comparator<? super T> comparador;
-    /// Montículo en arreglo: los hijos de `i` están en `2i+1` y `2i+2`; crece al doble cuando se llena.
+
+    /** Arreglo que representa el montículo en orden por niveles. */
     private Object[] monticulo = new Object[CAPACIDAD_INICIAL];
-    /// Cantidad de elementos.
+
+    /** Cantidad de posiciones ocupadas en el arreglo interno. */
     private int tamano;
 
-    /// @param comparator define la prioridad: el menor según el comparador sale primero
+    /**
+     * Crea una cola de prioridad vacía.
+     *
+     * @param comparador criterio de prioridad; el menor elemento según este
+     *                   comparador se extrae primero
+     */
     public ColaPrioridadMonticulo(Comparator<? super T> comparador) {
-        this.comparador = comparador;
+       this.comparador = comparador;
     }
 
-    /// Inserta el valor y lo sube hasta su lugar en O(log n).
+    /**
+    * Inserta un elemento y lo desplaza hacia arriba hasta restaurar la
+    * propiedad del min-heap.
+    *
+    * <p>Si el arreglo se llena, su capacidad se duplica antes de insertar.</p>
+    *
+    * @param valor elemento que se agregará
+    */
     public void ofrecer(T valor) {
         if (tamano == monticulo.length) {
             Object[] mayor = new Object[monticulo.length * 2];
@@ -46,7 +64,15 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         tamano++;
     }
 
-    /// Quita y devuelve el elemento de mayor prioridad en O(log n). Lanza [EstructuraVaciaExcepcion] si está vacía.
+    /**
+     * Retira y devuelve el elemento de mayor prioridad.
+     *
+     * <p>La raíz se reemplaza por el último elemento y este se desplaza hacia
+     * abajo para conservar la propiedad del montículo.</p>
+     *
+     * @return elemento menor según el comparador
+     * @throws EstructuraVaciaExcepcion si la cola no contiene elementos
+     */
     public T sacar() {
         if (tamano == 0) {
             throw new EstructuraVaciaExcepcion("PriorityQueue");
@@ -61,7 +87,12 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         return cima;
     }
 
-    /// Elemento de mayor prioridad sin quitarlo. Lanza [EstructuraVaciaExcepcion] si está vacía.
+    /**
+     * Consulta el elemento de mayor prioridad sin retirarlo.
+     *
+     * @return elemento menor según el comparador
+     * @throws EstructuraVaciaExcepcion si la cola no contiene elementos
+     */
     public T ver() {
         if (tamano == 0) {
             throw new EstructuraVaciaExcepcion("PriorityQueue");
@@ -69,7 +100,13 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         return elementoEn(0);
     }
 
-    /// Quita cada elemento que cumple la condición y reconstruye el montículo en O(n).
+    /**
+     * Elimina todos los elementos que satisfacen una condición y reconstruye
+     * el montículo con los elementos restantes.
+     *
+     * @param condicion predicado que determina qué elementos se eliminarán
+     * @return cantidad de elementos eliminados
+     */
     public int quitarSi(Predicate<? super T> condicion) {
         int conservado = 0;
         for (int i = 0; i < tamano; i++) {
@@ -86,7 +123,13 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         return quitado;
     }
 
-    /// Indica si algún elemento cumple la condición.
+    /**
+     * Indica si al menos un elemento satisface una condición.
+     *
+     * @param condicion predicado que se evaluará sobre los elementos
+     * @return {@code true} si existe una coincidencia; {@code false} en caso
+     *         contrario
+     */
     public boolean matchAny(Predicate<? super T> condicion) {
         for (int i = 0; i < tamano; i++) {
             if (condicion.test(elementoEn(i))) {
@@ -96,7 +139,14 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         return false;
     }
 
-    /// Devuelve los elementos en orden de prioridad sin modificar esta cola.
+    /**
+     * Obtiene los elementos en orden de prioridad sin modificar esta cola.
+     *
+     * <p>La operación trabaja sobre una copia y devuelve una lista que
+     * comienza con el elemento de mayor prioridad.</p>
+     *
+     * @return lista independiente con los elementos ordenados por prioridad
+     */
     public ListaDoblementeEnlazada<T> aListaOrdenada() {
         ColaPrioridadMonticulo<T> copia = new ColaPrioridadMonticulo<>(comparador);
         for (int i = 0; i < tamano; i++) {
@@ -109,36 +159,63 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         return ordenados;
     }
 
-    /// Cantidad de elementos.
+    /**
+     * Obtiene la cantidad actual de elementos.
+     *
+     * @return número de elementos almacenados
+     */
     public int tamano() {
         return tamano;
     }
 
-    /// Indica si la cola no tiene elementos.
+    /**
+     * Indica si la cola no contiene elementos.
+     *
+     * @return {@code true} si está vacía; {@code false} en caso contrario
+     */
     public boolean estaVacia() {
         return tamano == 0;
     }
 
-    /// Elimina todos los elementos.
+    /**
+     * Elimina todos los elementos y restaura la capacidad inicial del arreglo.
+     */
     public void vaciar() {
         monticulo = new Object[CAPACIDAD_INICIAL];
         tamano = 0;
     }
 
-    /// Recorre en el orden interno del montículo (no ordenado). Use [#aListaOrdenada()] para el orden de prioridad.
+    /**
+     * Crea un iterador sobre el orden interno del arreglo del montículo.
+     *
+     * <p>Este recorrido no está ordenado por prioridad; para obtener los
+     * elementos ordenados utilice {@link #aListaOrdenada()}.</p>
+     *
+     * @return iterador sobre las posiciones ocupadas del montículo
+     */
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
-            /// Posición que se devolverá a continuación.
+            /** Posición del arreglo que se devolverá a continuación. */
             private int indice;
 
-            /// Quedan elementos mientras no se haya recorrido todo el arreglo.
+            /**
+             * Indica si quedan posiciones ocupadas por recorrer.
+             *
+             * @return {@code true} si aún no se alcanzó el tamaño de la cola
+             */
             @Override
             public boolean hasNext() {
                 return indice < tamano;
             }
 
-            /// Devuelve el siguiente elemento del arreglo (orden del montículo, no de prioridad).
+            /**
+             * Devuelve el siguiente elemento en el orden interno del arreglo.
+             *
+             * @return elemento de la posición actual
+             * @throws NoSuchElementException si ya se recorrieron todos los
+             *         elementos
+             */
             @Override
             public T next() {
                 if (!hasNext()) {
@@ -149,14 +226,22 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         };
     }
 
-    /// Reconstruye el montículo en O(n) hundiendo cada nodo interno, desde el último hasta la raíz.
+    /**
+     * Reconstruye la propiedad del min-heap hundiendo cada nodo interno desde
+     * el último hasta la raíz.
+     */
     private void monticulizar() {
         for (int i = tamano / 2 - 1; i >= 0; i--) {
             cribarAbajo(i);
         }
     }
 
-    /// Sube el elemento mientras tenga más prioridad que su padre (después de insertar).
+    /**
+     * Desplaza un elemento hacia la raíz mientras tenga mayor prioridad que su
+     * padre. Se utiliza después de una inserción.
+     *
+     * @param indice posición inicial del elemento que se debe desplazar
+     */
     private void cribarArriba(int indice) {
         while (indice > 0) {
             int padre = (indice - 1) / 2;
@@ -168,7 +253,13 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         }
     }
 
-    /// Hunde el elemento mientras algún hijo tenga más prioridad (después de sacar la raíz).
+    /**
+     * Desplaza un elemento hacia las hojas mientras alguno de sus hijos tenga
+     * mayor prioridad. Se utiliza después de retirar la raíz o al construir el
+     * montículo.
+     *
+     * @param indice posición inicial del elemento que se debe desplazar
+     */
     private void cribarAbajo(int indice) {
         while (true) {
             int izquierda = 2 * indice + 1;
@@ -188,23 +279,37 @@ public class ColaPrioridadMonticulo<T> implements Iterable<T> {
         }
     }
 
-    /// Compara los elementos de dos posiciones con el comparador de la cola.
+    /**
+     * Compara los elementos ubicados en dos posiciones del arreglo.
+     *
+     * @param i primera posición
+     * @param j segunda posición
+     * @return resultado del comparador entre los elementos de ambas posiciones
+     */
     private int compare(int i, int j) {
         return comparador.compare(elementoEn(i), elementoEn(j));
     }
 
-    /// Intercambia dos posiciones del arreglo.
+    /**
+     * Intercambia los valores de dos posiciones del arreglo interno.
+     *
+     * @param i primera posición
+     * @param j segunda posición
+     */
     private void intercambiar(int i, int j) {
         Object temporal = monticulo[i];
         monticulo[i] = monticulo[j];
         monticulo[j] = temporal;
     }
 
-    /// Elemento de la posición dada con su tipo genérico.
+    /**
+     * Obtiene y convierte al tipo genérico el elemento de una posición ocupada.
+     *
+     * @param indice posición del elemento
+     * @return elemento almacenado en la posición indicada
+     */
     @SuppressWarnings("unchecked")
     private T elementoEn(int indice) {
         return (T) monticulo[indice];
     }
 }
-
-

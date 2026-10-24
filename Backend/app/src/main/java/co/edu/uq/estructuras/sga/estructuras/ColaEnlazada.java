@@ -5,34 +5,44 @@ import java.util.NoSuchElementException;
 
 import co.edu.uq.estructuras.sga.excepciones.EstructuraVaciaExcepcion;
 
-/// Cola FIFO genérica construida con nodos simplemente enlazados.
-///
-/// Se usa para: las solicitudes del canal externo de reservas, procesadas en orden de llegada.
-///
-/// @param <T> tipo de elemento
+/**
+ * Cola FIFO genérica construida con nodos simplemente enlazados.
+ *
+ * <p>Los elementos se agregan por el fondo y se retiran por el frente, por lo
+ * que ambas operaciones se realizan en tiempo constante. Se usa para
+ * procesar, en orden de llegada, las solicitudes del canal externo de
+ * reservas.</p>
+ *
+ * @param <T> tipo de elemento almacenado
+ */
 public class ColaEnlazada<T> implements Iterable<T> {
+    private Nodo<T> frente;
+    private Nodo<T> fondo;
+    private int tamano;
 
-    /// Nodo con su valor y el enlace al siguiente en la fila.
+    /**
+     * Nodo simple que almacena un valor y la referencia al nodo siguiente.
+     *
+     * @param <T> tipo del valor almacenado
+     */
     private static final class Nodo<T> {
-        /// Valor guardado.
         private final T valor;
-        /// Siguiente nodo hacia el final de la fila.
         private Nodo<T> siguiente;
-
-        /// Crea un nodo suelto.
+        /**
+         * Crea un nodo sin sucesor.
+         *
+         * @param valor valor que almacenará el nodo
+         */
         private Nodo(T valor) {
             this.valor = valor;
         }
     }
 
-    /// Frente de la fila (el próximo en salir).
-    private Nodo<T> frente;
-    /// Final de la fila (el último en llegar).
-    private Nodo<T> fondo;
-    /// Cantidad de elementos.
-    private int tamano;
-
-    /// Agrega el valor al final de la cola en O(1).
+    /**
+     * Agrega un elemento al fondo de la cola.
+     *
+     * @param valor elemento que se agregará
+     */
     public void encolar(T valor) {
         Nodo<T> nodo = new Nodo<>(valor);
         if (fondo == null) {
@@ -44,7 +54,12 @@ public class ColaEnlazada<T> implements Iterable<T> {
         tamano++;
     }
 
-    /// Quita y devuelve el primero de la cola en O(1). Lanza [EstructuraVaciaExcepcion] si está vacía.
+    /**
+     * Retira y devuelve el elemento que está en el frente de la cola.
+     *
+     * @return primer elemento que fue agregado y aún no ha sido retirado
+     * @throws EstructuraVaciaExcepcion si la cola no contiene elementos
+     */
     public T desencolar() {
         if (frente == null) {
             throw new EstructuraVaciaExcepcion("Queue");
@@ -58,7 +73,12 @@ public class ColaEnlazada<T> implements Iterable<T> {
         return valor;
     }
 
-    /// Primero de la cola sin quitarlo. Lanza [EstructuraVaciaExcepcion] si está vacía.
+    /**
+     * Consulta el elemento del frente sin retirarlo.
+     *
+     * @return elemento que se retiraría en la próxima operación
+     * @throws EstructuraVaciaExcepcion si la cola no contiene elementos
+     */
     public T ver() {
         if (frente == null) {
             throw new EstructuraVaciaExcepcion("Queue");
@@ -66,36 +86,62 @@ public class ColaEnlazada<T> implements Iterable<T> {
         return frente.valor;
     }
 
-    /// Cantidad de elementos en espera.
+    /**
+     * Obtiene la cantidad de elementos en espera.
+     *
+     * @return número actual de elementos
+     */
     public int tamano() {
         return tamano;
     }
 
-    /// Indica si la cola no tiene elementos.
+    /**
+     * Indica si la cola no contiene elementos.
+     *
+     * @return {@code true} si la cola está vacía; {@code false} en caso
+     *         contrario
+     */
     public boolean estaVacia() {
         return tamano == 0;
     }
 
-    /// Vacía la cola.
+    /**
+     * Elimina todos los elementos de la cola y la deja vacía.
+     */
     public void vaciar() {
         frente = fondo = null;
         tamano = 0;
     }
 
-    /// Recorre desde el frente hasta el final (orden de llegada).
+    /**
+     * Crea un iterador que recorre los elementos desde el frente hasta el
+     * fondo, respetando el orden de llegada.
+     *
+     * @return iterador de los elementos de la cola
+     */
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
-            /// Nodo que se devolverá a continuación.
+            /** Nodo cuyo valor se devolverá en la próxima llamada a {@code next}. */
             private Nodo<T> actual = frente;
 
-            /// Quedan elementos mientras el nodo actual exista.
+            /**
+             * Indica si todavía queda un elemento por recorrer.
+             *
+             * @return {@code true} si existe un nodo pendiente
+             */
             @Override
             public boolean hasNext() {
                 return actual != null;
             }
 
-            /// Devuelve el valor actual y avanza hacia el final de la fila.
+            /**
+             * Devuelve el elemento actual y avanza hacia el fondo de la cola.
+             *
+             * @return valor del nodo actual
+             * @throws NoSuchElementException si no quedan elementos por
+             *         recorrer
+             */
             @Override
             public T next() {
                 if (actual == null) {

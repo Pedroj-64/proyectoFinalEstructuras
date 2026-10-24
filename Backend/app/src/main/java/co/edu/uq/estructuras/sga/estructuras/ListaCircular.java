@@ -6,11 +6,13 @@ import java.util.NoSuchElementException;
 import co.edu.uq.estructuras.sga.excepciones.EstructuraVaciaExcepcion;
 
 public class ListaCircular<T> implements Iterable<T> {
-    /// Nodo con su valor y el enlace al siguiente (el último apunta al primero).
+    private Nodo<T> fondo;
+    private Nodo<T> cursor;
+    private int tamano;
+
+    
     private static final class Nodo<T> {
-        /// Valor guardado.
         private final T valor;
-        /// Siguiente nodo del círculo.
         private Nodo<T> siguiente;
 
         /// Crea un nodo suelto.
@@ -19,13 +21,8 @@ public class ListaCircular<T> implements Iterable<T> {
         }
     }
 
-    /// Último nodo; `fondo.next` es el primero. Guardar la cola hace que `agregar` sea O(1).
-    private Nodo<T> fondo;
-    /// Nodo actual de la rotación.
-    private Nodo<T> cursor;
-    /// Cantidad de elementos.
-    private int tamano;
-
+   
+    
     /// Agrega el valor al final de la vuelta (justo antes del primero).
     public void agregar(T valor) {
         Nodo<T> nodo = new Nodo<>(valor);
