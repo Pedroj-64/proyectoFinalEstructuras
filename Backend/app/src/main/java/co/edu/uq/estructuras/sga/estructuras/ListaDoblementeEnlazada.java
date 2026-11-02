@@ -16,6 +16,8 @@ import co.edu.uq.estructuras.sga.excepciones.EstructuraVaciaExcepcion;
  * desglose noche por noche de una cotización. Insertar y quitar en ambos
  * extremos es O(1); el
  * acceso por posición camina desde el extremo más cercano.
+ *
+ * @param <T> tipo de los elementos almacenados
  */
 public class ListaDoblementeEnlazada<T> implements Iterable<T> {
     private Nodo<T> cabeza;
