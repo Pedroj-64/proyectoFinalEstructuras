@@ -45,6 +45,15 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
         }
     }
 
+    @SafeVarargs
+    public static <T> ListaDoblementeEnlazada<T> de(T... valores) {
+        ListaDoblementeEnlazada<T> lista = new ListaDoblementeEnlazada<>();
+        for (T valor : valores) {
+            lista.agregarUltimo(valor);
+        }
+        return lista;
+    }
+
     /**
      * Crea una lista nueva con los elementos de otra fuente iterable, en el
      * mismo orden. La copia es estructural: los elementos no se clonan.
@@ -103,7 +112,7 @@ public class ListaDoblementeEnlazada<T> implements Iterable<T> {
      *
      * @param lista fuente de elementos que se agregarán
      */
-    public void agregarTodo(Iterable<? extends T> lista) {
+    public void agregarTodos(Iterable<? extends T> lista) {
         for (T valor : lista) {
             agregarUltimo(valor);
         }
