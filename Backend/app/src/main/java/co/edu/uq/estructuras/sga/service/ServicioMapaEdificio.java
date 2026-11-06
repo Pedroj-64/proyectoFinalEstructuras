@@ -12,6 +12,7 @@ import co.edu.uq.estructuras.sga.estructuras.ListaDoblementeEnlazada;
 import co.edu.uq.estructuras.sga.estructuras.MapaHash;
 import co.edu.uq.estructuras.sga.excepciones.NoEncontradoExcepcion;
 import co.edu.uq.estructuras.sga.excepciones.ReglaNegocioExcepcion;
+import co.edu.uq.estructuras.sga.service.Util.EscenarioReiniciadoEvento;
 
 /// Mapa del edificio como grafo ponderado: rutas de preparación (Dijkstra), análisis de
 /// conectividad (BFS/DFS) e impacto de cerrar un pasillo.
