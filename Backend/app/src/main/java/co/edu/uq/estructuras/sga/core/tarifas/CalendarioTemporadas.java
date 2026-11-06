@@ -19,8 +19,11 @@ public class CalendarioTemporadas {
 
     /// Agrega un periodo. Los periodos no se pueden solapar; si no, una noche tendría dos precios.
     ///
-    /// @throws RangoFechasInvalidoExcepcion si `periodo` comparte al menos un día con un periodo existente
+    /// @throws RangoFechasInvalidoExcepcion si `periodo` es `null` o comparte al menos un día con un periodo existente
     public void agregarPeriodo(PeriodoTemporada periodo) {
+        if (periodo == null) {
+            throw new RangoFechasInvalidoExcepcion("El periodo es obligatorio");
+        }
         PeriodoTemporada choque = periodos.buscar(existente -> existente.solapa(periodo));
         if (choque != null) {
             throw new RangoFechasInvalidoExcepcion("La temporada %s (%s a %s) se cruza con %s (%s a %s)".formatted(
@@ -32,7 +35,7 @@ public class CalendarioTemporadas {
 
     /// Reemplaza todos los periodos de forma atómica: si uno es inválido, se conserva el calendario anterior.
     ///
-    /// @throws RangoFechasInvalidoExcepcion si dos de los `nuevosPeriodos` comparten al menos un día
+    /// @throws RangoFechasInvalidoExcepcion si alguno de los `nuevosPeriodos` es `null` o si dos de ellos comparten al menos un día
     public void reemplazarPeriodos(Iterable<PeriodoTemporada> nuevosPeriodos) {
         CalendarioTemporadas candidato = new CalendarioTemporadas();
         for (PeriodoTemporada periodo : nuevosPeriodos) {

@@ -53,6 +53,20 @@ class CalendarioTemporadasTest {
     }
 
     @Test
+    @DisplayName("el periodo es obligatorio, esté vacío o no el calendario")
+    void periodoNuloLanzaExcepcion() {
+        CalendarioTemporadas calendario = new CalendarioTemporadas();
+        RangoFechasInvalidoExcepcion error =
+                assertThrows(RangoFechasInvalidoExcepcion.class, () -> calendario.agregarPeriodo(null));
+        assertEquals("El periodo es obligatorio", error.getMessage());
+        assertEquals(0, calendario.periodos().tamano());
+
+        calendario.agregarPeriodo(NAVIDAD);
+        assertThrows(RangoFechasInvalidoExcepcion.class, () -> calendario.agregarPeriodo(null));
+        assertEquals(1, calendario.periodos().tamano());
+    }
+
+    @Test
     @DisplayName("si un periodo nuevo es inválido, reemplazarPeriodos conserva el calendario anterior")
     void reemplazoInvalidoConservaElCalendario() {
         CalendarioTemporadas calendario = new CalendarioTemporadas();
