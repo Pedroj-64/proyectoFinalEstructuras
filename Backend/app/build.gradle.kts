@@ -43,7 +43,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "backend.App"
+    mainClass = "co.edu.uq.estructuras.sga.App"
 }
 
 tasks.named<Test>("test") {
