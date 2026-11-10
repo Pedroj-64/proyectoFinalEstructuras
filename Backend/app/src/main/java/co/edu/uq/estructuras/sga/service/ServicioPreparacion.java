@@ -1,6 +1,9 @@
 package co.edu.uq.estructuras.sga.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,9 @@ import co.edu.uq.estructuras.sga.excepciones.ReglaNegocioExcepcion;
 import co.edu.uq.estructuras.sga.core.preparacion.ComparadorTareaPreparacion;
 import co.edu.uq.estructuras.sga.core.preparacion.PreparacionEnCurso;
 import co.edu.uq.estructuras.sga.core.preparacion.TareaPreparacion;
+import co.edu.uq.estructuras.sga.core.reservas.Reserva;
+import co.edu.uq.estructuras.sga.repository.RepositorioReservas;
+import co.edu.uq.estructuras.sga.service.Util.ApartamentoNecesitaPreparacionEvento;
 import co.edu.uq.estructuras.sga.service.Util.EscenarioReiniciadoEvento;
 
 /// Cola de preparación de apartamentos (montículo de prioridad) y control de los que se están
@@ -25,6 +31,37 @@ public class ServicioPreparacion {
     private final MapaHash<String, PreparacionEnCurso> enCurso = new MapaHash<>();
     private int terminadas = 0;
     private long minutosAcumulados = 0;
+    private final RepositorioReservas reservas;
+    private final ServicioReloj reloj;
+
+    /// Sin reservas ni reloj (pruebas): el listener de eventos no se puede usar.
+    public ServicioPreparacion() {
+        this(null, null);
+    }
+
+    @Autowired
+    public ServicioPreparacion(RepositorioReservas reservas, ServicioReloj reloj) {
+        this.reservas = reservas;
+        this.reloj = reloj;
+    }
+
+    /// Observer: un apartamento quedó pendiente de preparación (check-out). Se encola con prioridad 1
+    /// si su próxima reserva activa llega hoy, y con la hora estimada de esa llegada.
+    @EventListener
+    public void alNecesitarPreparacion(ApartamentoNecesitaPreparacionEvento evento) {
+        LocalDateTime ahora = reloj.ahora();
+        LocalDate hoy = ahora.toLocalDate();
+        Reserva proxima = null;
+        for (Reserva r : reservas.buscarPorApartamento(evento.codigoApartamento())) {
+            if (r.estaActiva() && !r.obtenerEstancia().ingreso().isBefore(hoy)) {
+                proxima = r; // ordenadas por entrada: la primera es la más cercana
+                break;
+            }
+        }
+        boolean llegadaHoy = proxima != null && proxima.obtenerEstancia().ingreso().equals(hoy);
+        encolar(new TareaPreparacion(evento.codigoApartamento(), llegadaHoy,
+                llegadaHoy ? proxima.obtenerLlegadaEstimada() : null, ahora));
+    }
 
     /// Observer: vacía todo antes de cargar un escenario nuevo.
     @EventListener
