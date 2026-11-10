@@ -1,7 +1,8 @@
 package co.edu.uq.estructuras.sga.repository;
 
-import co.edu.uq.estructuras.sga.estructuras.ListaDoblementeEnlazada;
 import co.edu.uq.estructuras.sga.core.apartamentos.Apartamento;
+import co.edu.uq.estructuras.sga.estructuras.ListaDoblementeEnlazada;
+
 
 /// Puerto para guardar apartamentos. El dominio depende de esta abstracción y no de la
 /// implementación en memoria (principio de inversión de dependencias).

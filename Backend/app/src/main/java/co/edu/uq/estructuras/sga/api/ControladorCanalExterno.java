@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.uq.estructuras.sga.api.dto.DtosHuesped;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.ConflictoCanalDto;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.EnvioSolicitudExterna;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.ResultadoProcesamientoDto;
@@ -18,7 +17,6 @@ import co.edu.uq.estructuras.sga.core.canal.SolicitudReservaExterna;
 import co.edu.uq.estructuras.sga.core.reservas.Estancia;
 import co.edu.uq.estructuras.sga.service.ServicioCanalExterno;
 import co.edu.uq.estructuras.sga.service.ServicioReloj;
-
 import jakarta.validation.Valid;
 
 /// Endpoints del canal externo: plataforma simulada que envía solicitudes, cola y conflictos.
