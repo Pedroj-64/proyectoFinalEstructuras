@@ -1,4 +1,4 @@
-package co.edu.uq.estructuras.sga.core.tiempo;
+package co.edu.uq.estructuras.sga.service.tiempo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

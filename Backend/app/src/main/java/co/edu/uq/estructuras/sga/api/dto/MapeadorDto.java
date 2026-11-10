@@ -6,6 +6,29 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
 
+import co.edu.uq.estructuras.sga.api.dto.DtosApartamento.ApartamentoDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosApartamento.TarifasDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosFolio.FolioDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosFolio.MovimientoFolioDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosHuesped.HuespedDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosHuesped.RegistroEstanciaDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosHuesped.SolicitudHuesped;
+import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.EmpleadoDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.PeriodoTemporadaDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.TurnoDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.CobroNocheDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.CotizacionDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.OcupanteDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.ReservaDto;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.VistaPreviaReembolsoDto;
+import co.edu.uq.estructuras.sga.core.apartamentos.Apartamento;
+import co.edu.uq.estructuras.sga.core.huespedes.Huesped;
+import co.edu.uq.estructuras.sga.core.huespedes.PerfilHuesped;
+import co.edu.uq.estructuras.sga.core.huespedes.RegistroEstancia;
+import co.edu.uq.estructuras.sga.core.reservas.Reserva;
+import co.edu.uq.estructuras.sga.core.tarifas.CobroNoche;
+import co.edu.uq.estructuras.sga.core.tarifas.VistaPreviaReembolso;
+import co.edu.uq.estructuras.sga.service.ServicioTurnos;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.ConflictoCanalDto;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.NodoDto;
 import co.edu.uq.estructuras.sga.api.dto.DtosOperaciones.PasilloDto;
@@ -70,12 +93,6 @@ public final class MapeadorDto {
                 aDto(apartamento.obtenerTarifas()), apartamento.obtenerEstado(), apartamento.obtenerEstado().nombreMostrado(),
                 apartamento.obtenerMotivoFueraDeServicio(), apartamento.obtenerFueraDeServicioDesde(),
                 contadorReservas.applyAsInt(apartamento));
-    }
-
-    /// Resultado de disponibilidad a DTO.
-    public static ApartamentoDisponibleDto aDto(ApartamentoDisponible disponibles) {
-        return new ApartamentoDisponibleDto(aDto(disponibles.apartamento(), _ -> disponibles.cantidadReservas()),
-                disponibles.tarifaPorPersona().monto(), disponibles.totalEstimado().monto());
     }
 
     // Huéspedes -----------------------------------------------------------------
@@ -226,33 +243,5 @@ public final class MapeadorDto {
         return new ConflictoCanalDto(conflicto.idSolicitud(), conflicto.plataforma(), conflicto.codigoApartamento(),
                 conflicto.estancia().ingreso(), conflicto.estancia().salida(), conflicto.motivo(),
                 conflicto.idReservaEnConflicto(), conflicto.fechaDeteccion());
-    }
-
-    // Reportes y calendario -------------------------------------------------------
-
-    /// Resumen de estadísticas a DTO.
-    public static DtosReportes.ReporteDto aDto(ServicioReportes.Resumen resumen) {
-        return new DtosReportes.ReporteDto(resumen.desde(), resumen.hasta(),
-                aArreglo(resumen.ocupacionPorApartamento(), o -> new DtosReportes.OcupacionApartamentoDto(o.codigo(), o.nombre(),
-                        o.nochesOcupadas(), o.nochesTotales(), o.tarifa()), DtosReportes.OcupacionApartamentoDto[]::new),
-                aArreglo(resumen.ocupacionPorTemporada(), o -> new DtosReportes.OcupacionTemporadaDto(o.temporada(),
-                        o.temporada().nombreMostrado(), o.nochesOcupadas(), o.nochesDisponibles(), o.tarifa()),
-                        DtosReportes.OcupacionTemporadaDto[]::new),
-                aArreglo(resumen.ingresosPorMes(), i -> new DtosReportes.IngresosPeriodoDto(i.periodo().toString(),
-                        i.ingresos().monto()), DtosReportes.IngresosPeriodoDto[]::new),
-                resumen.ingresosTotales().monto(),
-                aArreglo(resumen.reservasPorCanal(), c -> new DtosReportes.ResumenCanalDto(c.canal(),
-                        c.canal().nombreMostrado(), c.total(), c.pendiente(), c.confirmada(), c.enCurso(), c.finalizada(),
-                        c.cancelada(), c.noPresentado()), DtosReportes.ResumenCanalDto[]::new),
-                resumen.conflictosCanal(), aArreglo(resumen.ultimosConflictos(), MapeadorDto::aDto, ConflictoCanalDto[]::new),
-                resumen.preparacionesTerminadas(), resumen.minutosPromedioPreparacion(), resumen.preparacionesEnCola());
-    }
-
-    /// Fila del calendario a DTO.
-    public static DtosReportes.FilaCalendarioDto aDto(ServicioCalendario.FilaCalendario fila) {
-        return new DtosReportes.FilaCalendarioDto(fila.apartamento().obtenerCodigo(), fila.apartamento().obtenerNombre(),
-                fila.apartamento().obtenerEstado(),
-                aArreglo(fila.celdas(), celda -> new DtosReportes.CeldaCalendarioDto(celda.noche(), celda.estado().name(),
-                        celda.idReserva(), celda.detalle()), DtosReportes.CeldaCalendarioDto[]::new));
     }
 }

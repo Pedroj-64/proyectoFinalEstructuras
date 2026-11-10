@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.edu.uq.estructuras.sga.core.personal.Empleado;
 import co.edu.uq.estructuras.sga.core.personal.RolEmpleado;
-import co.edu.uq.estructuras.sga.core.tiempo.ProveedorTiempo;
+import co.edu.uq.estructuras.sga.service.tiempo.ProveedorTiempo;
 import co.edu.uq.estructuras.sga.estructuras.ListaDoblementeEnlazada;
 import co.edu.uq.estructuras.sga.excepciones.ReglaNegocioExcepcion;
 

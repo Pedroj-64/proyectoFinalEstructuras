@@ -1,10 +1,10 @@
 package co.edu.uq.estructuras.sga.service;
 
 import co.edu.uq.estructuras.sga.core.personal.Empleado;
-import co.edu.uq.estructuras.sga.core.tiempo.ProveedorTiempo;
 import co.edu.uq.estructuras.sga.estructuras.ListaCircular;
 import co.edu.uq.estructuras.sga.estructuras.ListaDoblementeEnlazada;
 import co.edu.uq.estructuras.sga.excepciones.ReglaNegocioExcepcion;
+import co.edu.uq.estructuras.sga.service.tiempo.ProveedorTiempo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

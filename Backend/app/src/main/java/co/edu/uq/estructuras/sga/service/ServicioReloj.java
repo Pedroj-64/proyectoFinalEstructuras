@@ -1,12 +1,12 @@
 package co.edu.uq.estructuras.sga.service;
 
-import co.edu.uq.estructuras.sga.core.tiempo.ProveedorTiempo;
-
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
+
+import co.edu.uq.estructuras.sga.service.tiempo.ProveedorTiempo;
 
 /// Reloj del sistema con desfase ajustable, para que la demostración pueda "viajar en el tiempo"
 /// (por ejemplo, 25 horas adelante para ver vencer una reserva pendiente).

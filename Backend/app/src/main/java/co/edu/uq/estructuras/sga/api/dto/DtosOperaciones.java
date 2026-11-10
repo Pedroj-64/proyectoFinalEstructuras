@@ -9,6 +9,9 @@ import co.edu.uq.estructuras.sga.core.edificio.TipoNodo;
 import co.edu.uq.estructuras.sga.core.personal.RolEmpleado;
 import co.edu.uq.estructuras.sga.core.tarifas.Temporada;
 
+import co.edu.uq.estructuras.sga.api.dto.DtosHuesped.SolicitudHuesped;
+import co.edu.uq.estructuras.sga.api.dto.DtosReserva.OcupanteDto;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -117,8 +120,8 @@ public final class DtosOperaciones {
     /// Datos para que la plataforma simulada envíe una solicitud.
     public record EnvioSolicitudExterna(@NotBlank String plataforma, @NotBlank String codigoApartamento,
                                         @NotNull LocalDate ingreso, @NotNull LocalDate salida,
-                                        @NotNull @Valid DtosHuesped.SolicitudHuesped titular,
-                                        @Valid DtosReserva.OcupanteDto[] ocupantes) {
+                                        @NotNull @Valid SolicitudHuesped titular,
+                                        @Valid OcupanteDto[] ocupantes) {
     }
 
     /// Resultado de procesar una solicitud: aceptada con su reserva o rechazada con el motivo.
