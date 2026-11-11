@@ -6,3 +6,6 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Salida de compilación del IDE
+bin
