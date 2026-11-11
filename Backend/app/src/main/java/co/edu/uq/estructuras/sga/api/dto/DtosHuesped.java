@@ -25,4 +25,12 @@ public final class DtosHuesped {
     public record RegistroEstanciaDto(String idReserva, String codigoApartamento, String nombreApartamento, LocalDate ingreso,
                                       LocalDate salida, long noches, int ocupantes, long total) {
     }
+
+    /// Apartamento que el huésped quiere guardar como favorito.
+    public record SolicitudFavorito(@NotBlank String codigoApartamento) {
+    }
+
+    /// Resultado de agregar un favorito (el conjunto no admite repetidos).
+    public record ResultadoFavorito(boolean agregado, String mensaje) {
+    }
 }

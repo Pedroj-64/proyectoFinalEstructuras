@@ -1,6 +1,7 @@
 package co.edu.uq.estructuras.sga.api;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,6 @@ public class ControladorCanalExterno {
 
     private final ServicioCanalExterno canal;
     private final ServicioReloj reloj;
-    private int consecutivo = 0;
 
     /// Recibe por inyección el servicio del canal y el reloj del sistema.
     public ControladorCanalExterno(ServicioCanalExterno canal, ServicioReloj reloj) {
@@ -38,7 +38,7 @@ public class ControladorCanalExterno {
     @PostMapping("/solicitudes")
     @ResponseStatus(HttpStatus.CREATED)
     public SolicitudExternaDto enviar(@Valid @RequestBody EnvioSolicitudExterna envio) {
-        SolicitudReservaExterna solicitud = new SolicitudReservaExterna("EXT-%03d".formatted(++consecutivo), envio.plataforma(),
+        SolicitudReservaExterna solicitud = new SolicitudReservaExterna(canal.siguienteIdSolicitud(), envio.plataforma(),
                 envio.codigoApartamento().trim().toUpperCase(), new Estancia(envio.ingreso(), envio.salida()),
                 MapeadorDto.aPerfil(envio.titular()), MapeadorDto.aOcupantes(envio.ocupantes()), reloj.ahora());
         canal.recibir(solicitud);
@@ -49,6 +49,19 @@ public class ControladorCanalExterno {
     @GetMapping("/solicitudes")
     public SolicitudExternaDto[] pendientes() {
         return MapeadorDto.aArreglo(canal.pendientes(), MapeadorDto::aDto, SolicitudExternaDto[]::new);
+    }
+
+    /// Procesa solo la solicitud más antigua; responde 204 si la cola está vacía.
+    @PostMapping("/procesar-siguiente")
+    public ResponseEntity<ResultadoProcesamientoDto> procesarSiguiente() {
+        ServicioCanalExterno.ResultadoProcesamiento resultado = canal.procesarSiguiente(reloj.ahora());
+        return resultado == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(MapeadorDto.aDto(resultado));
+    }
+
+    /// Resultados de las solicitudes ya procesadas.
+    @GetMapping("/resultados")
+    public ResultadoProcesamientoDto[] resultados() {
+        return MapeadorDto.aArreglo(canal.resultados(), MapeadorDto::aDto, ResultadoProcesamientoDto[]::new);
     }
 
     /// Procesa toda la cola y devuelve el resultado de cada solicitud.
