@@ -27,6 +27,8 @@ public class ServicioCanalExterno {
     private final PuertoReservasExternas reservas;
     private final ColaEnlazada<SolicitudReservaExterna> pendientes = new ColaEnlazada<>();
     private final ListaDoblementeEnlazada<ConflictoCanal> conflictos = new ListaDoblementeEnlazada<>();
+    private final ListaDoblementeEnlazada<ResultadoProcesamiento> procesadas = new ListaDoblementeEnlazada<>();
+    private int consecutivo = 0;
 
     /// Recibe por inyección el puerto con el que se crean las reservas.
     public ServicioCanalExterno(PuertoReservasExternas reservas) {
@@ -38,6 +40,13 @@ public class ServicioCanalExterno {
     public void alReiniciarEscenario(EscenarioReiniciadoEvento evento) {
         pendientes.vaciar();
         conflictos.vaciar();
+        procesadas.vaciar();
+        consecutivo = 0;
+    }
+
+    /// Siguiente id para una solicitud nueva (EXT-001, EXT-002...). Se reinicia al cargar un escenario.
+    public String siguienteIdSolicitud() {
+        return "EXT-%03d".formatted(++consecutivo);
     }
 
     /// Una plataforma envía una solicitud: queda al final de la cola.
@@ -52,14 +61,23 @@ public class ServicioCanalExterno {
         }
         SolicitudReservaExterna solicitud = pendientes.desencolar();
         try {
-            return new ResultadoProcesamiento(solicitud, true, reservas.reservar(solicitud), null);
+            ResultadoProcesamiento aceptada = new ResultadoProcesamiento(solicitud, true, reservas.reservar(solicitud), null);
+            procesadas.agregarUltimo(aceptada);
+            return aceptada;
         } catch (DominioExcepcion e) {
             String enConflicto = e instanceof ReservaSolapadaExcepcion s ? s.obtenerIdReservaEnConflicto() : null;
             ConflictoCanal conflicto = new ConflictoCanal(solicitud.idSolicitud(), solicitud.plataforma(),
                     solicitud.codigoApartamento(), solicitud.estancia(), e.getMessage(), enConflicto, ahora);
             conflictos.agregarUltimo(conflicto);
-            return new ResultadoProcesamiento(solicitud, false, null, conflicto);
+            ResultadoProcesamiento rechazada = new ResultadoProcesamiento(solicitud, false, null, conflicto);
+            procesadas.agregarUltimo(rechazada);
+            return rechazada;
         }
+    }
+
+    /// Resultados de las solicitudes ya procesadas, en el orden en que se procesaron.
+    public ListaDoblementeEnlazada<ResultadoProcesamiento> resultados() {
+        return ListaDoblementeEnlazada.copiarDe(procesadas);
     }
 
     /// Procesa toda la cola en orden de llegada.

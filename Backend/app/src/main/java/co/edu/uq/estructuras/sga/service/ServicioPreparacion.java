@@ -15,6 +15,7 @@ import co.edu.uq.estructuras.sga.excepciones.NoEncontradoExcepcion;
 import co.edu.uq.estructuras.sga.excepciones.ReglaNegocioExcepcion;
 import co.edu.uq.estructuras.sga.core.preparacion.ComparadorTareaPreparacion;
 import co.edu.uq.estructuras.sga.core.preparacion.PreparacionEnCurso;
+import co.edu.uq.estructuras.sga.core.preparacion.RegistroPreparacion;
 import co.edu.uq.estructuras.sga.core.preparacion.TareaPreparacion;
 import co.edu.uq.estructuras.sga.core.reservas.Reserva;
 import co.edu.uq.estructuras.sga.repository.RepositorioReservas;
@@ -70,6 +71,14 @@ public class ServicioPreparacion {
         enCurso.vaciar();
         terminadas = 0;
         minutosAcumulados = 0;
+    }
+
+    /// Suma una preparación ya terminada (por ejemplo, las del escenario de demostración) al promedio de tiempos.
+    ///
+    /// @param registro preparación terminada
+    public void registrarHistorica(RegistroPreparacion registro) {
+        terminadas++;
+        minutosAcumulados += registro.minutos();
     }
 
     /// Agrega un apartamento a la cola; si ya estaba en cola o en preparación se rechaza.
