@@ -18,4 +18,10 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    // Los contextos exportan el proveedor junto con su hook (`useSesion`, `useAvisos`…): es el patrón
+    // habitual de React y el recargado en caliente sigue funcionando al editar el resto del código.
+    files: ['src/contexto/**', 'src/navegacion/Navegacion.jsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])
