@@ -1,0 +1,740 @@
+/*
+ * Estilos específicos de pantallas y piezas compuestas. Usa los tokens de sistema.css.
+ * Igual que allá: solo se animan transform y opacity.
+ */
+
+/* ============ Fotos ============ */
+
+.foto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.1s var(--muelle);
+}
+
+.foto--respaldo {
+  background:
+    radial-gradient(70% 60% at 30% 20%, rgb(95 122 100 / 0.35), transparent 70%),
+    radial-gradient(60% 60% at 80% 80%, rgb(181 88 58 / 0.25), transparent 70%),
+    var(--crema-2);
+}
+
+/* ============ Portada ============ */
+
+.portada {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .portada {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 5rem;
+  }
+}
+
+.portada__texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.portada__fotos {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.portada__principal {
+  aspect-ratio: 5 / 5.2;
+  width: 100%;
+  max-height: 36rem;
+}
+
+.portada__principal .bisel__nucleo {
+  position: relative;
+}
+
+.portada__principal .foto {
+  position: absolute;
+  inset: 0;
+}
+
+.portada__secundaria {
+  position: absolute;
+  left: -7%;
+  bottom: 0;
+  width: 40%;
+  aspect-ratio: 1;
+  transform: rotate(-3deg);
+  box-shadow: var(--sombra-flota);
+}
+
+.portada__secundaria .bisel__nucleo {
+  position: relative;
+}
+
+.portada__secundaria .foto {
+  position: absolute;
+  inset: 0;
+}
+
+.portada__chip {
+  position: absolute;
+  top: 8%;
+  right: -3%;
+  display: flex;
+  flex-direction: column;
+  max-width: 11rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 1.4rem;
+  background: rgb(255 254 251 / 0.94);
+  box-shadow: 0 0 0 1px var(--linea), var(--brillo), var(--sombra-flota);
+  transform: rotate(2deg);
+}
+
+.portada__chip strong {
+  font-family: var(--fuente-titulo);
+  font-weight: 300;
+  font-size: 2.2rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.portada__chip span {
+  font-size: 0.75rem;
+  color: var(--tinta-2);
+}
+
+/* Móvil: sin rotaciones ni solapamientos que estorben al tocar */
+@media (max-width: 767px) {
+  .portada__secundaria {
+    display: none;
+  }
+
+  .portada__chip {
+    position: static;
+    max-width: none;
+    margin-top: 1rem;
+    transform: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .portada__fotos {
+    padding-bottom: 0;
+  }
+}
+
+/* ============ Tarjetas de apartamento y de reserva ============ */
+
+.bento > * > .bisel,
+.rejilla > * > .bisel {
+  height: 100%;
+}
+
+.tarjeta-apto .bisel__nucleo,
+.tarjeta-reserva .bisel__nucleo {
+  display: flex;
+  flex-direction: column;
+}
+
+.tarjeta-apto__foto,
+.tarjeta-reserva__foto {
+  position: relative;
+  overflow: hidden;
+}
+
+.tarjeta-apto__foto {
+  flex: 1 1 auto;
+  min-height: 15rem;
+}
+
+.tarjeta-reserva__foto {
+  aspect-ratio: 16 / 10;
+}
+
+.tarjeta-apto__foto .foto {
+  position: absolute;
+  inset: 0;
+}
+
+.tarjeta-apto:hover .foto,
+.tarjeta-reserva:hover .foto {
+  transform: scale(1.05);
+}
+
+.tarjeta-apto__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+
+.tarjeta-reserva .tarjeta-apto__cuerpo {
+  flex: 1;
+  justify-content: space-between;
+}
+
+.tarjeta-apto__precio {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.tarjeta-apto__codigo {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--crema);
+  background: rgb(42 33 28 / 0.72);
+}
+
+.tarjeta-reserva__foto > .insignia {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  background: rgb(255 254 251 / 0.94);
+}
+
+.tarjeta-reserva__foto > .insignia--salvia {
+  color: var(--salvia-oscuro);
+}
+
+.corazon {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  color: var(--tinta-2);
+  background: rgb(255 254 251 / 0.92);
+  box-shadow: 0 8px 20px -8px rgb(70 45 25 / 0.4);
+  cursor: pointer;
+  transition: transform 0.6s var(--muelle), color 0.5s var(--muelle);
+}
+
+.corazon:hover {
+  transform: scale(1.08);
+}
+
+.corazon:active {
+  transform: scale(0.92);
+}
+
+.corazon--activo {
+  color: var(--terracota);
+}
+
+.corazon--activo svg {
+  animation: latir 0.8s var(--muelle);
+}
+
+@keyframes latir {
+  40% {
+    transform: scale(1.35);
+  }
+}
+
+.tarifas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.tarifas > div {
+  padding: 0.6rem 0.75rem;
+  border-radius: 1rem;
+  background: rgb(42 33 28 / 0.04);
+}
+
+.tarifas dt {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+.tarifas dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* ============ Buscador ============ */
+
+.buscador {
+  position: relative;
+  flex: 1 1 15rem;
+}
+
+.buscador > svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: var(--tinta-3);
+  pointer-events: none;
+}
+
+.buscador input {
+  padding-left: 2.8rem;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ============ Listas, atajos y leyendas del panel ============ */
+
+.tarjeta-lista .bisel__nucleo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista > li {
+  border-top: 1px solid var(--linea);
+}
+
+.lista > li:first-child {
+  border-top: 0;
+}
+
+.fila-lista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.8rem 0;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+}
+
+button.fila-lista {
+  cursor: pointer;
+  transition: transform 0.6s var(--muelle);
+}
+
+button.fila-lista:hover {
+  transform: translateX(4px);
+}
+
+.atajo {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  border: 0;
+  border-radius: 1.25rem;
+  font: inherit;
+  text-align: left;
+  color: var(--tinta);
+  background: rgb(42 33 28 / 0.04);
+  box-shadow: inset 0 0 0 1px var(--linea);
+  cursor: pointer;
+  transition: transform 0.6s var(--muelle), background-color 0.5s var(--muelle);
+}
+
+.atajo > span {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.atajo:hover {
+  background: rgb(42 33 28 / 0.07);
+  transform: translateY(-2px);
+}
+
+.atajo:active {
+  transform: scale(0.985);
+}
+
+.segmentada {
+  display: flex;
+  gap: 4px;
+  height: 14px;
+}
+
+.segmentada span {
+  min-width: 8px;
+  border-radius: 999px;
+  transition: transform 0.6s var(--muelle);
+}
+
+.segmentada span:hover {
+  transform: scaleY(1.5);
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  font-size: 0.82rem;
+  color: var(--tinta-2);
+}
+
+.leyenda--columna {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.leyenda__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.leyenda__item i {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.leyenda__item i[class*='celda--'] {
+  border-radius: 4px;
+}
+
+/* ============ Calendario ============ */
+
+.calendario {
+  margin-top: 1.25rem;
+  overflow-x: auto;
+  transition: opacity 0.5s var(--muelle);
+}
+
+.calendario table {
+  border-collapse: separate;
+  border-spacing: 3px;
+  font-size: 0.7rem;
+}
+
+.calendario th {
+  font-weight: 600;
+  color: var(--tinta-3);
+  text-align: center;
+  padding: 0.2rem 0;
+}
+
+.calendario .calendario__nombre {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 9.5rem;
+  padding-right: 0.75rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--tinta);
+  background: var(--papel);
+}
+
+.calendario .calendario__nombre small {
+  display: block;
+  font-weight: 400;
+  color: var(--tinta-3);
+}
+
+.calendario .calendario__hoy {
+  background: rgb(95 122 100 / 0.1);
+  border-radius: 8px;
+  color: var(--salvia-oscuro);
+}
+
+.celda {
+  display: block;
+  width: 1.6rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  cursor: default;
+  transition: transform 0.5s var(--muelle);
+}
+
+.celda:not(:disabled) {
+  cursor: pointer;
+}
+
+.celda:not(:disabled):hover {
+  transform: scale(1.15);
+}
+
+.celda--LIBRE {
+  background: rgb(42 33 28 / 0.05);
+}
+
+.celda--OCUPADO {
+  background: var(--salvia);
+}
+
+.celda--BLOQUEADA {
+  background: repeating-linear-gradient(135deg, var(--terracota-suave) 0 4px, rgb(181 88 58 / 0.4) 4px 6px);
+}
+
+/* ============ Preparación ============ */
+
+.cola {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cola > li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--linea);
+}
+
+.cola > li:first-child {
+  border-top: 0;
+}
+
+.cola__posicion {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  font-family: var(--fuente-titulo);
+  color: var(--salvia-oscuro);
+  background: var(--salvia-suave);
+}
+
+.ruta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ruta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ruta__nodo {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--crema);
+  background: var(--tinta);
+}
+
+.ruta__nodo--inicio {
+  background: var(--salvia-oscuro);
+}
+
+.ruta__tramo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--tinta-3);
+}
+
+/* ============ Huéspedes ============ */
+
+.tarjeta-huesped {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.6rem;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ============ Mapa del edificio ============ */
+
+.mapa {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 20rem;
+  background-image: radial-gradient(rgb(42 33 28 / 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.mapa__pasillo {
+  stroke: rgb(42 33 28 / 0.26);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke 0.6s var(--muelle);
+}
+
+.mapa__pasillo--cerrado {
+  stroke: var(--terracota);
+  stroke-dasharray: 3 9;
+}
+
+.mapa__pasillo--ruta {
+  stroke: var(--salvia-oscuro);
+  stroke-width: 7;
+}
+
+.mapa__zona {
+  stroke: transparent;
+  stroke-width: 24;
+  stroke-linecap: round;
+  cursor: pointer;
+  transition: stroke 0.5s var(--muelle);
+}
+
+.mapa__zona:hover {
+  stroke: rgb(95 122 100 / 0.2);
+}
+
+.mapa__nodo {
+  cursor: pointer;
+  outline: none;
+}
+
+.mapa__nodo circle {
+  stroke: var(--papel);
+  stroke-width: 4;
+  transition: opacity 0.5s var(--muelle);
+}
+
+.mapa__nodo:hover circle,
+.mapa__nodo:focus-visible circle {
+  opacity: 0.8;
+}
+
+.mapa__nodo--elegido circle {
+  stroke: var(--tinta);
+}
+
+.mapa__nodo text {
+  font: 600 13px var(--fuente-texto);
+  fill: var(--tinta-2);
+  paint-order: stroke;
+  stroke: var(--papel);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* ============ Reportes ============ */
+
+.barra-fila {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.barra__relleno,
+.columna__barra {
+  animation: 1.3s var(--muelle) both;
+}
+
+.barra__relleno {
+  animation-name: crecer-x;
+}
+
+.columna__barra {
+  animation-name: crecer-y;
+}
+
+@keyframes crecer-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes crecer-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.columnas {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.columna {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 4.2rem;
+}
+
+.columna__riel {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 11rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: rgb(42 33 28 / 0.05);
+}
+
+.columna__barra {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem 1rem 0 0;
+  background: linear-gradient(180deg, var(--salvia), var(--salvia-oscuro));
+  transform-origin: bottom center;
+  transform: scaleY(var(--valor, 0));
+}
+
+/* ============ Enlaces ============ */
+
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--salvia-oscuro);
+  text-underline-offset: 4px;
+}
